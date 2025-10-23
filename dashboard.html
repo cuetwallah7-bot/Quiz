@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Quiz Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #f8f9fa;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .user-info {
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .welcome-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .welcome-section h1 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-section p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .category-section {
+            margin-bottom: 3rem;
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .category-title {
+            font-size: 1.5rem;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .tests-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .test-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-left: 4px solid #667eea;
+        }
+
+        .test-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .test-header {
+            display: flex;
+            justify-content: between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .test-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .test-type {
+            background: #ff6b6b;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .test-type.free {
+            background: #2ecc71;
+        }
+
+        .test-details {
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .test-link {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .test-link:hover {
+            background: #5a6fd8;
+        }
+
+        .admin-panel-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #ff6b6b;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+            transition: transform 0.3s;
+        }
+
+        .admin-panel-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+
+        .no-tests {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 1rem;
+            }
+            
+            .tests-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">QuizMaster</div>
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="results.html">My Results</a>
+            <div class="user-info">
+                <span id="userName">User</span>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="welcome-section">
+            <h1>Welcome, <span id="welcomeName">Student</span>!</h1>
+            <p>Choose from our comprehensive test series and track your progress.</p>
+        </div>
+
+        <div id="loading" class="loading">Loading tests...</div>
+
+        <div id="testsContainer"></div>
+
+        <!-- Admin Panel Button (only show for admin users) -->
+        <a href="admin.html" id="adminPanelBtn" class="admin-panel-btn" style="display: none;">Admin Panel</a>
+    </div>
+
+    <script>
+        let userData = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in
+            const storedUserData = localStorage.getItem('userData');
+            if (!storedUserData) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            userData = JSON.parse(storedUserData);
+            document.getElementById('userName').textContent = userData.FullName;
+            document.getElementById('welcomeName').textContent = userData.FullName;
+
+            // Show admin panel button for specific users (you can modify this condition)
+            if (userData.Email.includes('admin') || userData.UserType === 'admin') {
+                document.getElementById('adminPanelBtn').style.display = 'block';
+            }
+
+            loadDashboardTests();
+        });
+
+        function loadDashboardTests() {
+            showLoading(true);
+
+            google.script.run
+                .withSuccessHandler(handleTestsLoad)
+                .withFailureHandler(handleTestsError)
+                .getDashboardTests(userData.UserType);
+        }
+
+        function handleTestsLoad(response) {
+            showLoading(false);
+
+            if (response.success) {
+                displayTests(response.tests);
+            } else {
+                showError('Failed to load tests: ' + response.message);
+            }
+        }
+
+        function handleTestsError(error) {
+            showLoading(false);
+            showError('An error occurred while loading tests.');
+            console.error(error);
+        }
+
+        function displayTests(testsData) {
+            const container = document.getElementById('testsContainer');
+            container.innerHTML = '';
+
+            const categories = [
+                { name: 'JEE', key: 'JEE', color: '#667eea' },
+                { name: 'NEET', key: 'NEET', color: '#ff6b6b' },
+                { name: 'CUET', key: 'CUET', color: '#2ecc71' }
+            ];
+
+            categories.forEach(category => {
+                const categoryTests = testsData[category.key];
+                if (!categoryTests || categoryTests.length === 0) return;
+
+                const categorySection = document.createElement('div');
+                categorySection.className = 'category-section';
+                
+                categorySection.innerHTML = `
+                    <div class="category-header">
+                        <h2 class="category-title" style="color: ${category.color}">${category.name} Tests</h2>
+                    </div>
+                    <div class="tests-grid" id="grid-${category.key}"></div>
+                `;
+
+                container.appendChild(categorySection);
+
+                const grid = document.getElementById(`grid-${category.key}`);
+                categoryTests.forEach(test => {
+                    const testCard = createTestCard(test, category.color);
+                    grid.appendChild(testCard);
+                });
+            });
+
+            // Show message if no tests available
+            if (container.innerHTML === '') {
+                container.innerHTML = `
+                    <div class="no-tests">
+                        <h3>No tests available at the moment</h3>
+                        <p>Check back later for new test series.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function createTestCard(test, color) {
+            const card = document.createElement('div');
+            card.className = 'test-card';
+            card.style.borderLeftColor = color;
+
+            card.innerHTML = `
+                <div class="test-header">
+                    <div style="flex: 1;">
+                        <div class="test-name">${test.TestName}</div>
+                        <div class="test-type ${test.TestType}">${test.TestType.toUpperCase()}</div>
+                    </div>
+                </div>
+                <div class="test-details">
+                    <div>Category: ${test.Category}</div>
+                    <div>Questions: 50</div>
+                    <div>Duration: 3 hours</div>
+                </div>
+                <a href="${test.TestLink}" target="_blank" class="test-link" style="background: ${color}">
+                    Start Test
+                </a>
+            `;
+
+            return card;
+        }
+
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+        }
+
+        function showError(message) {
+            const container = document.getElementById('testsContainer');
+            container.innerHTML = `
+                <div class="no-tests">
+                    <h3>Error</h3>
+                    <p>${message}</p>
+                    <button onclick="loadDashboardTests()" style="
+                        background: #667eea;
+                        color: white;
+                        border: none;
+                        padding: 0.7rem 1.5rem;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        margin-top: 1rem;
+                    ">Retry</button>
+                </div>
+            `;
+        }
+
+        function logout() {
+            localStorage.removeItem('userData');
+            localStorage.removeItem('isDemo');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
